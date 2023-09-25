@@ -87,7 +87,7 @@ export default function Home() {
 
   return (
     <Layout>
-      <h1 className="text-2xl pb-5">Welcome to the Partykit starter!🎈</h1>
+      <h1 className="text-2xl pb-5">Welcome to Gaibins !</h1>
       <div>
         <form className="flex flex-col gap-4" onSubmit={handleFormSubmit}>
           <label
