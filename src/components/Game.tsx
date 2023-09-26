@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useGameRoom } from "@/hooks/useGameRoom";
 import { stringToColor } from "@/utils";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import CanvasDraw from "react-canvas-draw";
 
 interface GameProps {
   username: string;
@@ -35,9 +38,14 @@ const Game = ({ username, roomId }: GameProps) => {
   return (
     <>
       <h1 className="text-2xl border-b border-yellow-400 text-center relative">
-        🎲 Guess the number!
+       🖌️ Guess the Drawing!
       </h1>
+        <div className="flex flex-col gap-4 py-6 items-center">
+          <CanvasDraw />
+        </div>
+      
       <section>
+        {/*
         <form
           className="flex flex-col gap-4 py-6 items-center"
           onSubmit={handleGuess}
@@ -56,10 +64,12 @@ const Game = ({ username, roomId }: GameProps) => {
             onChange={(e) => setGuess(Number(e.currentTarget.value))}
             value={guess}
           />
+
           <button className="rounded border p-5 bg-yellow-400 group text-black shadow hover:animate-wiggle">
             Guess!
           </button>
         </form>
+        */}
 
         <div className="border-t border-yellow-400 py-2" />
 
