@@ -4,14 +4,17 @@ import { stringToColor } from "@/utils";
 import React from "react";
 import ReactDOM from "react-dom";
 import CanvasDraw from "../draw";
-import { GameState } from "../../game/logic";
+import { Action, GameState } from "../../game/logic";
 
 interface GameProps {
   username: string;
   roomId: string;
 }
 
-const Lobby = ({ gameState, isHost }: { gameState: GameState, isHost: boolean }) => {
+const Lobby = ({ gameState, isHost, dispatch }: { gameState: GameState, isHost: boolean, dispatch: (action: Action) => void }) => {
+  const handleStart = () => {
+    dispatch({ type: 'start' })
+  }
   return (
     <>
       <h1 className="text-2xl border-b border-yellow-400 text-center relative">
@@ -22,7 +25,7 @@ const Lobby = ({ gameState, isHost }: { gameState: GameState, isHost: boolean })
         {isHost && (
           <div>
             <div>Hey, since you are the host, you can start the game! Don't make them wait!</div>
-            <button style={{ backgroundColor: 'green' , color: 'white', padding: '8px'}}>Start</button>
+            <button onClick={handleStart} style={{ backgroundColor: 'green' , color: 'white', padding: '8px'}}>Start</button>
           </div>
         )}
       </div>
@@ -63,17 +66,10 @@ const Game = ({ username, roomId }: GameProps) => {
 
   const isHost = gameState.users[0].id === username;
 
-  const handleGuess = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    // Dispatch allows you to send an action!
-    // Modify /game/logic.ts to change what actions you can send
-    dispatch({ type: "guess", guess: guess });
-  };
-
   const phase = (() => {
     switch (gameState.state) {
       case "lobby":
-        return <Lobby gameState={gameState} isHost={isHost} />;
+        return <Lobby gameState={gameState} isHost={isHost} dispatch={dispatch} />;
       case "drawing":
         return <Drawing gameState={gameState} />;
     }

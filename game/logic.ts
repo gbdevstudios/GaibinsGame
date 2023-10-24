@@ -47,7 +47,7 @@ export const initialGame = (): GameState => ({
 });
 
 // Here are all the actions we can dispatch for a user
-type GameAction = { type: "guess"; guess: number };
+type GameAction = { type: "start" } | { type: 'submit-drawing' };
 
 export const gameUpdater = (
   action: ServerAction,
@@ -76,27 +76,11 @@ export const gameUpdater = (
         users: state.users.filter((user) => user.id !== action.user.id),
         log: addLog(`user ${action.user.id} left 😢`, state.log),
       };
-
-
-
-    // case "guess":
-    //   if (action.guess === state.target) {
-    //     return {
-    //       ...state,
-    //       target: Math.floor(Math.random() * 100),
-    //       log: addLog(
-    //         `user ${action.user.id} guessed ${action.guess} and won! 👑`,
-    //         state.log
-    //       ),
-    //     };
-    //   } else {
-    //     return {
-    //       ...state,
-    //       log: addLog(
-    //         `user ${action.user.id} guessed ${action.guess}`,
-    //         state.log
-    //       ),
-    //     };
-    //   }
+    case "start":
+      return {
+        ...state,
+        state: 'drawing',
+        log: addLog('everyone here; game started!', state.log)
+      }
   }
 };
