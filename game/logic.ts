@@ -35,14 +35,14 @@ export type DefaultAction = { type: "UserEntered" } | { type: "UserExit" };
 
 // This interface holds all the information about your game
 export interface GameState extends BaseGameState {
-  target: number;
+  state: "lobby" | "instructions" | "drawing" | "voting" | "viewing-results";
 }
 
 // This is how a fresh new game starts out, it's a function so you can make it dynamic!
 // In the case of the guesser game we start out with a random target
-export const initialGame = () => ({
+export const initialGame = (): GameState => ({
   users: [],
-  target: Math.floor(Math.random() * 100),
+  state: "lobby",
   log: addLog("Game Created!", []),
 });
 

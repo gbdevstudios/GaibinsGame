@@ -1,14 +1,41 @@
 import { useState } from "react";
 import { useGameRoom } from "@/hooks/useGameRoom";
 import { stringToColor } from "@/utils";
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 import CanvasDraw from "../draw";
+import { GameState } from "../../game/logic";
 
 interface GameProps {
   username: string;
   roomId: string;
 }
+
+const Lobby = ({ gameState }: { gameState: GameState }) => {
+  return (
+    <>
+      <h1 className="text-2xl border-b border-yellow-400 text-center relative">
+        LOBBY!!!!!!
+      </h1>
+      <div className="flex flex-col gap-4 py-6 items-center">
+        Who's going to show up for your party game??
+      </div>
+    </>
+  );
+};
+
+const Drawing = ({ gameState }: { gameState: GameState }) => {
+  return (
+    <>
+      <h1 className="text-2xl border-b border-yellow-400 text-center relative">
+        🖌️ Guess the Drawing!
+      </h1>
+      <div className="flex flex-col gap-4 py-6 items-center">
+        <CanvasDraw />
+      </div>
+    </>
+  );
+};
 
 const Game = ({ username, roomId }: GameProps) => {
   const { gameState, dispatch } = useGameRoom(username, roomId);
@@ -35,42 +62,20 @@ const Game = ({ username, roomId }: GameProps) => {
     dispatch({ type: "guess", guess: guess });
   };
 
+  const phase = (() => {
+    switch (gameState.state) {
+      case "lobby":
+        return <Lobby gameState={gameState} />;
+      case "drawing":
+        return <Drawing gameState={gameState} />;
+    }
+  })();
+
   return (
     <>
-      <h1 className="text-2xl border-b border-yellow-400 text-center relative">
-       🖌️ Guess the Drawing!
-      </h1>
-        <div className="flex flex-col gap-4 py-6 items-center">
-          <CanvasDraw />
-        </div>
-      
+      {phase}
+
       <section>
-        {/*
-        <form
-          className="flex flex-col gap-4 py-6 items-center"
-          onSubmit={handleGuess}
-        >
-          <label
-            htmlFor="guess"
-            className="text-7xl font-bold text-stone-50 bg-black rounded p-2 text-"
-          >
-            {guess}
-          </label>
-          <input
-            type="range"
-            name="guess"
-            id="guess"
-            className="opacity-70 hover:opacity-100 accent-yellow-400"
-            onChange={(e) => setGuess(Number(e.currentTarget.value))}
-            value={guess}
-          />
-
-          <button className="rounded border p-5 bg-yellow-400 group text-black shadow hover:animate-wiggle">
-            Guess!
-          </button>
-        </form>
-        */}
-
         <div className="border-t border-yellow-400 py-2" />
 
         <div className=" bg-yellow-100 flex flex-col p-4 rounded text-sm">
