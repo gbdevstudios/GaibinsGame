@@ -59,6 +59,9 @@ export const gameUpdater = (
 
   // Every action has a user field that represent the user who dispatched the action,
   // you don't need to add this yourself
+
+  
+    // trying it first without xstate
   switch (action.type) {
     case "UserEntered":
       return {
@@ -74,24 +77,26 @@ export const gameUpdater = (
         log: addLog(`user ${action.user.id} left 😢`, state.log),
       };
 
-    case "guess":
-      if (action.guess === state.target) {
-        return {
-          ...state,
-          target: Math.floor(Math.random() * 100),
-          log: addLog(
-            `user ${action.user.id} guessed ${action.guess} and won! 👑`,
-            state.log
-          ),
-        };
-      } else {
-        return {
-          ...state,
-          log: addLog(
-            `user ${action.user.id} guessed ${action.guess}`,
-            state.log
-          ),
-        };
-      }
+
+
+    // case "guess":
+    //   if (action.guess === state.target) {
+    //     return {
+    //       ...state,
+    //       target: Math.floor(Math.random() * 100),
+    //       log: addLog(
+    //         `user ${action.user.id} guessed ${action.guess} and won! 👑`,
+    //         state.log
+    //       ),
+    //     };
+    //   } else {
+    //     return {
+    //       ...state,
+    //       log: addLog(
+    //         `user ${action.user.id} guessed ${action.guess}`,
+    //         state.log
+    //       ),
+    //     };
+    //   }
   }
 };

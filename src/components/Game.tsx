@@ -11,7 +11,7 @@ interface GameProps {
   roomId: string;
 }
 
-const Lobby = ({ gameState }: { gameState: GameState }) => {
+const Lobby = ({ gameState, isHost }: { gameState: GameState, isHost: boolean }) => {
   return (
     <>
       <h1 className="text-2xl border-b border-yellow-400 text-center relative">
@@ -19,6 +19,12 @@ const Lobby = ({ gameState }: { gameState: GameState }) => {
       </h1>
       <div className="flex flex-col gap-4 py-6 items-center">
         Who's going to show up for your party game??
+        {isHost && (
+          <div>
+            <div>Hey, since you are the host, you can start the game! Don't make them wait!</div>
+            <button style={{ backgroundColor: 'green' , color: 'white', padding: '8px'}}>Start</button>
+          </div>
+        )}
       </div>
     </>
   );
@@ -55,6 +61,8 @@ const Game = ({ username, roomId }: GameProps) => {
     );
   }
 
+  const isHost = gameState.users[0].id === username;
+
   const handleGuess = (event: React.SyntheticEvent) => {
     event.preventDefault();
     // Dispatch allows you to send an action!
@@ -65,7 +73,7 @@ const Game = ({ username, roomId }: GameProps) => {
   const phase = (() => {
     switch (gameState.state) {
       case "lobby":
-        return <Lobby gameState={gameState} />;
+        return <Lobby gameState={gameState} isHost={isHost} />;
       case "drawing":
         return <Drawing gameState={gameState} />;
     }
