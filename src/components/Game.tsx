@@ -3,7 +3,7 @@ import { useGameRoom } from "@/hooks/useGameRoom";
 import { stringToColor } from "@/utils";
 import React from 'react';
 import ReactDOM from 'react-dom';
-import CanvasDraw from "react-canvas-draw";
+import CanvasDraw from "../draw";
 
 interface GameProps {
   username: string;
