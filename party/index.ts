@@ -7,6 +7,7 @@ interface ServerMessage {
   state: GameState;
 }
 
+
 export default class Server implements Party.Server {
   private gameState: GameState;
 

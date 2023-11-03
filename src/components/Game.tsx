@@ -5,11 +5,28 @@ import React from "react";
 import ReactDOM from "react-dom";
 import CanvasDraw from "../draw";
 import { Action, GameState } from "../../game/logic";
+import { render } from "react-dom";
 
 interface GameProps {
   username: string;
   roomId: string;
 }
+
+let word:any;
+
+const words = [
+  "bird",
+  "lion",
+  "eagle",
+  "monkey",
+  "fish",
+  "Joe Biden",
+  "house",
+  "cat",
+  "dog"
+]
+
+word  = words[Math.floor(Math.random()*9+1)]
 
 const Lobby = ({ gameState, isHost, dispatch }: { gameState: GameState, isHost: boolean, dispatch: (action: Action) => void }) => {
   const handleStart = () => {
@@ -33,16 +50,38 @@ const Lobby = ({ gameState, isHost, dispatch }: { gameState: GameState, isHost: 
   );
 };
 
-const Drawing = ({ gameState }: { gameState: GameState }) => {
+const Drawing = ({ gameState, isHost }: { gameState: GameState, isHost: boolean, }) => {
+    return (
+    <>
+      <h1 className="text-2xl border-b border-yellow-400 text-center relative">
+        🖌️ Draw: {word}
+      </h1>
+      
+      <div className="flex flex-col gap-4 py-6 items-center">
+        
+      <CanvasDraw />
+
+      </div>
+    </>
+  );
+};
+
+
+
+
+const Guessing = ({ gameState,isHost }: {gameState: GameState, isHost: boolean}) => {
   return (
     <>
       <h1 className="text-2xl border-b border-yellow-400 text-center relative">
         🖌️ Guess the Drawing!
       </h1>
       <div className="flex flex-col gap-4 py-6 items-center">
-        <CanvasDraw />
+        <input type="text">
+          Enter Guess:
+        </input>
       </div>
     </>
+
   );
 };
 
@@ -71,7 +110,9 @@ const Game = ({ username, roomId }: GameProps) => {
       case "lobby":
         return <Lobby gameState={gameState} isHost={isHost} dispatch={dispatch} />;
       case "drawing":
-        return <Drawing gameState={gameState} />;
+        return <Drawing gameState={gameState} isHost={isHost} />;
+      case "guessing":
+        return <Guessing gameState={gameState} isHost={isHost}  />;
     }
   })();
 

@@ -35,7 +35,7 @@ export type DefaultAction = { type: "UserEntered" } | { type: "UserExit" };
 
 // This interface holds all the information about your game
 export interface GameState extends BaseGameState {
-  state: "lobby" | "instructions" | "drawing" | "voting" | "viewing-results";
+  state: "lobby" | "instructions" | "drawing" | "guessing" | "viewing-results";
 }
 
 // This is how a fresh new game starts out, it's a function so you can make it dynamic!
