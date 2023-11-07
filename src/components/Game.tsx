@@ -4,23 +4,22 @@ import { stringToColor } from "@/utils";
 import React, { Component } from "react";
 import { useRef } from 'react';
 import ReactDOM from "react-dom";
-import CanvasDraw from "../draw";
+//import CanvasDraw from "../draw";
 import { Action, GameState } from "../../game/logic";
 import { object } from "zod";
 import styles from './Game';
+import { ReactSketchCanvas } from 'react-sketch-canvas';
+
+
+const drawStyles = {
+  
+};
+
 
 interface GameProps {
   username: string;
   roomId: string;
 }
-
-//const firstCanvas = useRef(object);
-//const secondCanvas = useRef();
-
-//const handleClick = () => {
-  //const data = firstCanvas.current.getSaveData();
-  //secondCanvas.current.loadSaveData(data);
-//};
 
 let word:any;
 
@@ -70,6 +69,7 @@ const Drawing = ({ gameState, isHost, dispatch }: { gameState: GameState, dispat
   const handleDraw = () => {
     dispatch({ type: 'submit-drawing' })
   }
+
   let img = "";
     return (
     <>
@@ -77,37 +77,45 @@ const Drawing = ({ gameState, isHost, dispatch }: { gameState: GameState, dispat
         🖌️ Draw: {word}
       </h1>
       <div className="flex flex-col gap-4 py-6 items-center">
-
-      <CanvasDraw />
-        
+        <ReactSketchCanvas
+        style={drawStyles}
+        width="600"
+        height="900"
+        strokeWidth={4}
+        strokeColor="black"
+      />
+      
       </div>
-      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center',
+      <div style={{display: 'block', justifyContent: 'center', alignItems: 'center',textAlign: 'center',
           height: '50px', border: "3px"}}>
         <button 
-        //onClick={handleClick}
         className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle"
         >
         Save
         </button>
         <button 
+        style={{marginLeft:'4px'}}
         className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle l-padding-50"
         >
         Undo
         </button>
-      </div>
-      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center',
-          height: '70px', border: "3px"}}>
+      
+      
         <label className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle l-padding-25"
+        style={{marginLeft:'4px'}}
         >Ready? 
            <input type="checkbox"
-          className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle l-padding-25"
+    
+          className="bg-black rounded p-1 inline-block shadow text-xs text-stone-50 hover:animate-wiggle"
           ></input>
+        </label>
           {isHost && (
             <button onClick={handleDraw}
+            style={{marginLeft: '4px'}}
             className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle"
             >Move to Voting Round!</button>
           )}
-        </label>
+          
       </div>
     </>
   );
