@@ -35,7 +35,7 @@ export type DefaultAction = { type: "UserEntered" } | { type: "UserExit" };
 
 // This interface holds all the information about your game
 export interface GameState extends BaseGameState {
-  state: "lobby" | "instructions" | "drawing" | "guessing" | "viewing-results";
+  state: "lobby" | "instructions" | "drawing" | "voting" | "viewing-results";
 }
 
 // This is how a fresh new game starts out, it's a function so you can make it dynamic!
@@ -47,7 +47,7 @@ export const initialGame = (): GameState => ({
 });
 
 // Here are all the actions we can dispatch for a user
-type GameAction = { type: "start" } | { type: 'submit-drawing' };
+type GameAction = { type: "start" } | { type: 'submit-drawing' } | {type: 'submit-vote'};
 
 export const gameUpdater = (
   action: ServerAction,
@@ -81,6 +81,19 @@ export const gameUpdater = (
         ...state,
         state: 'drawing',
         log: addLog('everyone here; game started!', state.log)
+      }
+    case "submit-drawing":
+      return {
+        ...state,
+        state: 'voting',
+        log: addLog('everyone drew; time to vote!', state.log)
+
+      }
+    case "submit-vote":
+      return {
+        ...state,
+        state: 'viewing-results',
+        log: addLog('check out the results!', state.log)
       }
   }
 };

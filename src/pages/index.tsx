@@ -76,6 +76,7 @@ export default function Home() {
                 });
               }}
               className="bg-black rounded p-2 inline-block shadow text-xs text-stone-50 hover:animate-wiggle"
+              style={{marginBottom: '10px'}}
             >
               Leave Room
             </button>

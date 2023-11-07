@@ -75,7 +75,7 @@ export default class CanvasDraw extends PureComponent {
     backgroundColor: "#FFF",
     hideGrid: false,
     canvasWidth: 800,
-    canvasHeight: 800,
+    canvasHeight: 700,
     disabled: false,
     imgSrc: "",
     saveData: "",
