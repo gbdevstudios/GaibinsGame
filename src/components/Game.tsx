@@ -10,12 +10,6 @@ import { object } from "zod";
 import styles from './Game';
 import { ReactSketchCanvas } from 'react-sketch-canvas';
 
-
-const drawStyles = {
-  
-};
-
-
 interface GameProps {
   username: string;
   roomId: string;
@@ -43,19 +37,23 @@ const Lobby = ({ gameState, isHost, dispatch }: { gameState: GameState, isHost: 
   }
   return (
     <>
-      <h1 className="text-2xl border-b border-yellow-400 text-center relative">
+      <h1 className="text-8xl border-b border-yellow-400 text-center relative">
         LOBBY!!!!!!
       </h1>
-      <div className="flex flex-col gap-4 py-6 items-center">
+      <div className="text-9x1 border-b flex flex-col gap-4 py-6 items-center"
+      style={{height: '200px'}}
+      >
         Whos going to show up for your party game??
         {isHost && (
           <div >
-            <div>Hey, since you are the host, you can start the game! Dont make them wait!</div>
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center',
-          height: '50px', border: "3px"}}>
+            height: '50px', border: "3px"}}
+            className='text-8x1'>
+            Hey, since you are the host, you can start the game! Dont make them wait!
             <button 
             onClick={handleStart} 
             className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle"
+            style={{borderSpacing: '40px', marginLeft: '10px'}}
             >Start</button>
             </div>
           </div>
@@ -69,25 +67,23 @@ const Drawing = ({ gameState, isHost, dispatch }: { gameState: GameState, dispat
   const handleDraw = () => {
     dispatch({ type: 'submit-drawing' })
   }
-
-  let img = "";
     return (
     <>
       <h1 className="text-2xl border-b border-yellow-400 text-center relative">
         🖌️ Draw: {word}
       </h1>
       <div className="flex flex-col gap-4 py-6 items-center">
-        <ReactSketchCanvas
-        style={drawStyles}
-        width="600"
-        height="900"
-        strokeWidth={4}
-        strokeColor="black"
+        
+      <ReactSketchCanvas 
+      width="800px"
+      height="700px"
+      strokeWidth={4}
+      strokeColor="red"
       />
-      
+
       </div>
       <div style={{display: 'block', justifyContent: 'center', alignItems: 'center',textAlign: 'center',
-          height: '50px', border: "3px"}}>
+          height: '50px', border: "3px", marginBottom: '7px'}}>
         <button 
         className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle"
         >
@@ -99,8 +95,6 @@ const Drawing = ({ gameState, isHost, dispatch }: { gameState: GameState, dispat
         >
         Undo
         </button>
-      
-      
         <label className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle l-padding-25"
         style={{marginLeft:'4px'}}
         >Ready? 
@@ -125,20 +119,56 @@ const Voting = ({ gameState, isHost, dispatch}: {gameState: GameState, isHost: b
   const handleVote = () => {
     dispatch({type: 'submit-vote'})
   }
-  return (
-    <>
-      <h1 className="text-2xl border-b border-yellow-400 text-center relative">
-        🖌️ Vote on the Drawings!
-      </h1>
-      <div className="flex flex-col gap-4 py-6 items-center">
-        <input type="text">
-          Vote!:
-        </input>
-      </div>
-    </>
 
+  return (
+    <div>
+      <h1 className="text-2xl border-b border-yellow-400 text-center relative">
+      🖌️ Vote on the Drawings!
+      </h1>
+    </div>
   );
+  
 };
+
+
+
+/*
+const Canvas = class extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.canvas = React.createRef();
+  }
+
+  render() {
+    return (
+      <div>
+        <ReactSketchCanvas
+          ref={this.canvas}
+          strokeWidth={5}
+          strokeColor="black"
+        />
+        <button
+          onClick={() => {
+            this.canvas.current.
+              .exportImage("png")
+              .then(data => {
+                console.log(data);
+              })
+              .catch(e => {
+                console.log(e);
+              });
+          }}
+        >
+          Get Image
+        </button>
+      </div>
+    );
+  }
+};
+
+*/
+
 
 const Game = ({ username, roomId }: GameProps) => {
   const { gameState, dispatch } = useGameRoom(username, roomId);
