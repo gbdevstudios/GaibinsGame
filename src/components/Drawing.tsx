@@ -56,6 +56,13 @@ export const Drawing = ({
         }}
       >
         <button
+          onClick={ref.current?.clearCanvas}
+          style={{ marginLeft: "4px"}}
+          className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle"
+        >
+          Clear
+        </button>
+        <button
           onClick={handleSubmit}
           style={{ marginLeft: "4px", opacity: alreadySubmitted ? 0.5 : 1 }}
           disabled={alreadySubmitted}
