@@ -1,13 +1,15 @@
 import React, { useRef } from "react";
 import { Action, GameState } from "../../game/logic";
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
-import { word } from "./Game";
+
 
 export const Drawing = ({
+  userId,
   gameState,
   isHost,
   dispatch,
 }: {
+  userId: string
   gameState: GameState;
   dispatch: (action: Action) => void;
   isHost: boolean;
@@ -25,10 +27,13 @@ export const Drawing = ({
   const handleForceEnd = () => {
     dispatch({ type: "force-end" });
   };
+  const alreadySubmitted = Boolean(gameState.drawings[userId])
+  
+  console.log('userId', userId, alreadySubmitted)
   return (
     <>
       <h1 className="text-2xl border-b border-yellow-400 text-center relative">
-        🖌️ Draw: {word}
+        🖌️ Draw: {gameState.prompt}
       </h1>
       <div className="flex flex-col gap-4 py-6 items-center">
         <ReactSketchCanvas
@@ -52,7 +57,8 @@ export const Drawing = ({
       >
         <button
           onClick={handleSubmit}
-          style={{ marginLeft: "4px" }}
+          style={{ marginLeft: "4px", opacity: alreadySubmitted ? 0.5 : 1 }}
+          disabled={alreadySubmitted}
           className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle"
         >
           Submit

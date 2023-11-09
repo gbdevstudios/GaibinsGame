@@ -16,21 +16,6 @@ interface GameProps {
   roomId: string;
 }
 
-export let word: any;
-
-const words = [
-  "bird",
-  "lion",
-  "eagle",
-  "monkey",
-  "fish",
-  "Joe Biden",
-  "house",
-  "cat",
-  "dog",
-];
-
-word = words[Math.floor(Math.random() * 9 + 1)];
 
 const Game = ({ username, roomId }: GameProps) => {
   const { gameState, dispatch } = useGameRoom(username, roomId);
@@ -60,7 +45,7 @@ const Game = ({ username, roomId }: GameProps) => {
         );
       case "drawing":
         return (
-          <Drawing gameState={gameState} isHost={isHost} dispatch={dispatch} />
+          <Drawing userId={username} gameState={gameState} isHost={isHost} dispatch={dispatch} />
         );
       case "voting":
         return (

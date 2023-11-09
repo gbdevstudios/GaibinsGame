@@ -11,6 +11,7 @@ export const useGameRoom = (username: string, roomId: string) => {
     id: username,
     onMessage(event: MessageEvent<string>) {
       setGameState(JSON.parse(event.data));
+      console.log(JSON.parse(event.data))
     },
   });
 

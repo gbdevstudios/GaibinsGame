@@ -44,6 +44,19 @@ export interface GameState extends BaseGameState {
     }
   >;
 }
+export let word: any;
+
+const words = [
+  "bird",
+  "lion",
+  "eagle",
+  "monkey",
+  "fish",
+  "Joe Biden",
+  "house",
+  "cat",
+  "dog",
+];
 
 // This is how a fresh new game starts out, it's a function so you can make it dynamic!
 // In the case of the guesser game we start out with a random target
@@ -51,7 +64,7 @@ export const initialGame = (): GameState => ({
   users: [],
   state: "lobby",
   log: addLog("Game Created!", []),
-  prompt: "Who is your daddy?",
+  prompt: words[Math.floor(Math.random() * 9 + 1)],
   drawings: {},
 });
 
