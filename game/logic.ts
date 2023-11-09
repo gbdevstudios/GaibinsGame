@@ -36,6 +36,13 @@ export type DefaultAction = { type: "UserEntered" } | { type: "UserExit" };
 // This interface holds all the information about your game
 export interface GameState extends BaseGameState {
   state: "lobby" | "instructions" | "drawing" | "voting" | "viewing-results";
+  prompt: string;
+  drawings: Record<
+    string,
+    {
+      img: string;
+    }
+  >;
 }
 
 // This is how a fresh new game starts out, it's a function so you can make it dynamic!
@@ -44,10 +51,16 @@ export const initialGame = (): GameState => ({
   users: [],
   state: "lobby",
   log: addLog("Game Created!", []),
+  prompt: "Who is your daddy?",
+  drawings: {},
 });
 
 // Here are all the actions we can dispatch for a user
-type GameAction = { type: "start" } | { type: 'submit-drawing' } | {type: 'submit-vote'};
+type GameAction =
+  | { type: "start" }
+  | { type: "submit-drawing"; img: string }
+  | { type: "submit-vote"; who: string }
+  | { type: "force-end" };
 
 export const gameUpdater = (
   action: ServerAction,
@@ -60,8 +73,7 @@ export const gameUpdater = (
   // Every action has a user field that represent the user who dispatched the action,
   // you don't need to add this yourself
 
-  
-    // trying it first without xstate
+  // trying it first without xstate
   switch (action.type) {
     case "UserEntered":
       return {
@@ -79,21 +91,29 @@ export const gameUpdater = (
     case "start":
       return {
         ...state,
-        state: 'drawing',
-        log: addLog('everyone here; game started!', state.log)
-      }
+        state: "drawing",
+        log: addLog("everyone here; game started!", state.log),
+      };
     case "submit-drawing":
       return {
         ...state,
-        state: 'voting',
-        log: addLog('everyone drew; time to vote!', state.log)
-
-      }
+        drawings: {
+          ...state.drawings,
+          [action.user.id]: { img: action.img },
+        },
+        log: addLog(action.user.id + " submitted a drawing!", state.log),
+      };
+    case "force-end":
+      return {
+        ...state,
+        state: "voting",
+        log: addLog("Host moves us on to voting", state.log),
+      };
     case "submit-vote":
       return {
         ...state,
-        state: 'viewing-results',
-        log: addLog('check out the results!', state.log)
-      }
+        state: "viewing-results",
+        log: addLog("check out the results!", state.log),
+      };
   }
 };

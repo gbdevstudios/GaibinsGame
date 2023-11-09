@@ -2,20 +2,21 @@ import { useState } from "react";
 import { useGameRoom } from "@/hooks/useGameRoom";
 import { stringToColor } from "@/utils";
 import React, { Component } from "react";
-import { useRef } from 'react';
+import { useRef } from "react";
 import ReactDOM from "react-dom";
 //import CanvasDraw from "../draw";
-import { Action, GameState } from "../../game/logic";
 import { object } from "zod";
-import styles from './Game';
-import { ReactSketchCanvas } from 'react-sketch-canvas';
+import styles from "./Game";
+import { Drawing } from "./Drawing";
+import { Voting } from "./Voting";
+import { Lobby } from "./Lobby";
 
 interface GameProps {
   username: string;
   roomId: string;
 }
 
-let word:any;
+export let word: any;
 
 const words = [
   "bird",
@@ -26,149 +27,10 @@ const words = [
   "Joe Biden",
   "house",
   "cat",
-  "dog"
-]
+  "dog",
+];
 
-word  = words[Math.floor(Math.random()*9+1)]
-
-const Lobby = ({ gameState, isHost, dispatch }: { gameState: GameState, isHost: boolean, dispatch: (action: Action) => void }) => {
-  const handleStart = () => {
-    dispatch({ type: 'start' })
-  }
-  return (
-    <>
-      <h1 className="text-8xl border-b border-yellow-400 text-center relative">
-        LOBBY!!!!!!
-      </h1>
-      <div className="text-9x1 border-b flex flex-col gap-4 py-6 items-center"
-      style={{height: '200px'}}
-      >
-        Whos going to show up for your party game??
-        {isHost && (
-          <div >
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center',
-            height: '50px', border: "3px"}}
-            className='text-8x1'>
-            Hey, since you are the host, you can start the game! Dont make them wait!
-            <button 
-            onClick={handleStart} 
-            className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle"
-            style={{borderSpacing: '40px', marginLeft: '10px'}}
-            >Start</button>
-            </div>
-          </div>
-        )}
-      </div>
-    </>
-  );
-};
-
-const Drawing = ({ gameState, isHost, dispatch }: { gameState: GameState, dispatch: (action:Action) => void, isHost: boolean, }) => {
-  const handleDraw = () => {
-    dispatch({ type: 'submit-drawing' })
-  }
-    return (
-    <>
-      <h1 className="text-2xl border-b border-yellow-400 text-center relative">
-        🖌️ Draw: {word}
-      </h1>
-      <div className="flex flex-col gap-4 py-6 items-center">
-        
-      <ReactSketchCanvas 
-      width="800px"
-      height="700px"
-      strokeWidth={4}
-      strokeColor="red"
-      />
-
-      </div>
-      <div style={{display: 'block', justifyContent: 'center', alignItems: 'center',textAlign: 'center',
-          height: '50px', border: "3px", marginBottom: '7px'}}>
-        <button 
-        className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle"
-        >
-        Save
-        </button>
-        <button 
-        style={{marginLeft:'4px'}}
-        className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle l-padding-50"
-        >
-        Undo
-        </button>
-        <label className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle l-padding-25"
-        style={{marginLeft:'4px'}}
-        >Ready? 
-           <input type="checkbox"
-    
-          className="bg-black rounded p-1 inline-block shadow text-xs text-stone-50 hover:animate-wiggle"
-          ></input>
-        </label>
-          {isHost && (
-            <button onClick={handleDraw}
-            style={{marginLeft: '4px'}}
-            className="bg-black rounded p-4 inline-block shadow text-xs text-stone-50 hover:animate-wiggle"
-            >Move to Voting Round!</button>
-          )}
-          
-      </div>
-    </>
-  );
-};
-
-const Voting = ({ gameState, isHost, dispatch}: {gameState: GameState, isHost: boolean, dispatch: (action:Action) => void}) => {
-  const handleVote = () => {
-    dispatch({type: 'submit-vote'})
-  }
-
-  return (
-    <div>
-      <h1 className="text-2xl border-b border-yellow-400 text-center relative">
-      🖌️ Vote on the Drawings!
-      </h1>
-    </div>
-  );
-  
-};
-
-
-
-/*
-const Canvas = class extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.canvas = React.createRef();
-  }
-
-  render() {
-    return (
-      <div>
-        <ReactSketchCanvas
-          ref={this.canvas}
-          strokeWidth={5}
-          strokeColor="black"
-        />
-        <button
-          onClick={() => {
-            this.canvas.current.
-              .exportImage("png")
-              .then(data => {
-                console.log(data);
-              })
-              .catch(e => {
-                console.log(e);
-              });
-          }}
-        >
-          Get Image
-        </button>
-      </div>
-    );
-  }
-};
-
-*/
-
+word = words[Math.floor(Math.random() * 9 + 1)];
 
 const Game = ({ username, roomId }: GameProps) => {
   const { gameState, dispatch } = useGameRoom(username, roomId);
@@ -193,11 +55,17 @@ const Game = ({ username, roomId }: GameProps) => {
   const phase = (() => {
     switch (gameState.state) {
       case "lobby":
-        return <Lobby gameState={gameState} isHost={isHost} dispatch={dispatch} />;
+        return (
+          <Lobby gameState={gameState} isHost={isHost} dispatch={dispatch} />
+        );
       case "drawing":
-        return <Drawing gameState={gameState} isHost={isHost} dispatch={dispatch}/>;
+        return (
+          <Drawing gameState={gameState} isHost={isHost} dispatch={dispatch} />
+        );
       case "voting":
-        return <Voting gameState={gameState} isHost={isHost} dispatch={dispatch} />;
+        return (
+          <Voting gameState={gameState} isHost={isHost} dispatch={dispatch} />
+        );
     }
   })();
 
