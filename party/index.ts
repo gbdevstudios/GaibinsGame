@@ -22,7 +22,10 @@ export default class Server implements Party.Server {
     // let's send a message to the connection
     // conn.send();
     this.gameState = gameUpdater(
-      { type: "UserEntered", user: { id: connection.id } },
+      { type: "UserEntered", user: {
+        id: connection.id,
+        hasSubmitted: false
+      } },
       this.gameState
     );
     this.party.broadcast(JSON.stringify(this.gameState));
@@ -31,7 +34,10 @@ export default class Server implements Party.Server {
     this.gameState = gameUpdater(
       {
         type: "UserExit",
-        user: { id: connection.id },
+        user: {
+          id: connection.id,
+          hasSubmitted: false
+        },
       },
       this.gameState
     );
@@ -40,7 +46,10 @@ export default class Server implements Party.Server {
   onMessage(message: string, sender: Party.Connection) {
     const action: ServerAction = {
       ...(JSON.parse(message) as Action),
-      user: { id: sender.id },
+      user: {
+        id: sender.id,
+        hasSubmitted: false
+      },
     };
     console.log(`Received action ${action.type} from user ${sender.id}`);
     this.gameState = gameUpdater(action, this.gameState);

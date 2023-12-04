@@ -9,6 +9,7 @@ const addLog = (message: string, logs: GameState["log"]): GameState["log"] => {
 // If there is anything you want to track for a specific user, change this interface
 export interface User {
   id: string;
+  hasSubmitted: boolean;
 }
 
 // Do not change this! Every game has a list of users and log of actions
@@ -37,6 +38,7 @@ export type DefaultAction = { type: "UserEntered" } | { type: "UserExit" };
 export interface GameState extends BaseGameState {
   state: "lobby" | "instructions" | "drawing" | "voting" | "viewing-results";
   prompt: string;
+  hasSubmitted:boolean;
   drawings: Record<
     string,
     {
@@ -62,23 +64,27 @@ const words = [
 // In the case of the guesser game we start out with a random target
 export const initialGame = (): GameState => ({
   users: [],
+  hasSubmitted: false,
   state: "lobby",
   log: addLog("Game Created!", []),
   prompt: words[Math.floor(Math.random() * 9 + 1)],
   drawings: {},
 });
 
+
 // Here are all the actions we can dispatch for a user
 type GameAction =
   | { type: "start" }
-  | { type: "submit-drawing"; img: string }
-  | { type: "submit-vote"; who: string }
+  | { type: "submit-drawing"; img: string;}
+  | { type: "submit-vote"; who: string ; }
   | { type: "force-end" };
 
 export const gameUpdater = (
   action: ServerAction,
   state: GameState
 ): GameState => {
+  const allSubmitted: boolean = state.users.every((user) => user.hasSubmitted);
+
   // This switch should have a case for every action type you add.
 
   // "UserEntered" & "UserExit" are defined by default
@@ -108,12 +114,18 @@ export const gameUpdater = (
         log: addLog("everyone here; game started!", state.log),
       };
     case "submit-drawing":
+      const updatedUsersSubmitDrawing = state.users.map((user) =>
+        user.id === action.user.id ? { ...user, hasSubmitted: true } : user
+      );
+
       return {
         ...state,
+        users: updatedUsersSubmitDrawing,
         drawings: {
           ...state.drawings,
           [action.user.id]: { img: action.img },
         },
+        hasSubmitted: allSubmitted,
         log: addLog(action.user.id + " submitted a drawing!", state.log),
       };
     case "force-end":
@@ -123,10 +135,16 @@ export const gameUpdater = (
         log: addLog("Host moves us on to voting", state.log),
       };
     case "submit-vote":
-      return {
-        ...state,
-        state: "viewing-results",
-        log: addLog("check out the results!", state.log),
-      };
+      const updatedUsersSubmitVote = state.users.map((user) =>
+      user.id === action.user.id ? { ...user, hasSubmitted: true } : user
+    );
+
+    return {
+      ...state,
+      users: updatedUsersSubmitVote,
+      hasSubmitted: allSubmitted, // Update hasSubmitted based on all users
+      state: "viewing-results",
+      log: addLog("check out the results!", state.log),
+    };
   }
 };
