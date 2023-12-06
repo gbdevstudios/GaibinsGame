@@ -6,21 +6,6 @@ const addLog = (message: string, logs: GameDb["log"]): GameDb["log"] => {
   );
 };
 
-// If there is anything you want to track for a specific user, change this interface
-export interface User {
-  id: string;
-  hasSubmitted: boolean;
-}
-
-// Do not change this! Every game has a list of users and log of actions
-interface BaseGameState {
-  users: User[];
-  log: {
-    dt: number;
-    message: string;
-  }[];
-}
-
 // Do not change!
 export type Action = DefaultAction | GameAction;
 
@@ -34,17 +19,21 @@ type WithUser<T> = T & { user: User };
 
 export type DefaultAction = { type: "UserEntered" } | { type: "UserExit" };
 
+export interface User {
+  id: string;
+  img: string | undefined;
+  votedFor: string | undefined;
+}
+
 // This interface holds all the information about your game
-export interface GameDb extends BaseGameState {
+export interface GameDb {
   state: "lobby" | "instructions" | "drawing" | "voting" | "viewing-results";
+  users: User[];
+  log: {
+    dt: number;
+    message: string;
+  }[];
   prompt: string;
-  hasSubmitted:boolean;
-  drawings: Record<
-    string,
-    {
-      img: string;
-    }
-  >;
 }
 export let word: any;
 
@@ -64,11 +53,9 @@ const words = [
 // In the case of the guesser game we start out with a random target
 export const initialGame = (): GameDb => ({
   users: [],
-  hasSubmitted: false,
   state: "lobby",
   log: addLog("Game Created!", []),
   prompt: words[Math.floor(Math.random() * 9 + 1)],
-  drawings: {},
 });
 
 
@@ -115,20 +102,17 @@ export const gameUpdater = (
       };
     case "submit-drawing":
       const updatedUsersSubmitDrawing = db.users.map((user) =>
-        user.id === action.user.id ? { ...user, hasSubmitted: true } : user
+        user.id === action.user.id ? { 
+          ...user,
+           img: action.img
+        } : user
       );
       
-      const allSubmitted = updatedUsersSubmitDrawing.every(user => user.hasSubmitted);
-      const nextState = allSubmitted ? 'voting' : 'drawing'
+      const allDrawingsSubmitted = updatedUsersSubmitDrawing.every(user => user.img);
       return {
         ...db,
         users: updatedUsersSubmitDrawing,
-        drawings: {
-          ...db.drawings,
-          [action.user.id]: { img: action.img },
-        },
-        state: nextState,
-        hasSubmitted: allSubmitted,
+        state:  allDrawingsSubmitted ? 'voting' : 'drawing',
         log: addLog(action.user.id + " submitted a drawing!", db.log),
       };
     case "force-end":
@@ -139,7 +123,19 @@ export const gameUpdater = (
       };
     case "submit-vote":
       const updatedUsersSubmitVote = db.users.map((user) =>
-      user.id === action.user.id ? { ...user, hasSubmitted: true } : user
+        user.id === action.user.id ? { 
+          ...user, 
+          votedFor: action.who
+         } : user
+      );
+      
+      const allVotesSubmitted = updatedUsersSubmitVote.every(user => user.votedFor);
+      return {
+        ...db,
+        users: updatedUsersSubmitVote,
+        state: allVotesSubmitted ? 'viewing-results' : 'voting',
+        log: addLog(action.user.id + " submitted a drawing!", db.log),
+      };
     );
 
     return {
