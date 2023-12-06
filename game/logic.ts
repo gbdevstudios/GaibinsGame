@@ -23,11 +23,12 @@ export interface User {
   id: string;
   img: string | undefined;
   votedFor: string | undefined;
+  hasSubmitted: boolean; 
 }
 
 // This interface holds all the information about your game
 export interface GameDb {
-  [x: string]: { [s: string]: unknown; } | ArrayLike<unknown>;
+  [x: string]: { [s: string]: unknown } | ArrayLike<unknown>;
   state: "lobby" | "instructions" | "drawing" | "voting" | "viewing-results";
   users: User[];
   log: {
@@ -59,28 +60,16 @@ export const initialGame = (): GameDb => ({
   prompt: words[Math.floor(Math.random() * 9 + 1)],
 });
 
-
 // Here are all the actions we can dispatch for a user
 type GameAction =
   | { type: "start" }
-  | { type: "submit-drawing"; img: string;}
-  | { type: "submit-vote"; who: string ; }
+  | { type: "submit-drawing"; img: string }
+  | { type: "submit-vote"; who: string }
   | { type: "force-end" };
 
-export const gameUpdater = (
-  action: ServerAction,
-  db: GameDb
-): GameDb => {
+export const gameUpdater = (action: ServerAction, db: GameDb): GameDb => {
   const allSubmitted: boolean = db.users.every((user) => user.hasSubmitted);
 
-  // This switch should have a case for every action type you add.
-
-  // "UserEntered" & "UserExit" are defined by default
-
-  // Every action has a user field that represent the user who dispatched the action,
-  // you don't need to add this yourself
-
-  // trying it first without xstate
   switch (action.type) {
     case "UserEntered":
       return {
@@ -95,56 +84,62 @@ export const gameUpdater = (
         users: db.users.filter((user) => user.id !== action.user.id),
         log: addLog(`user ${action.user.id} left 😢`, db.log),
       };
+
     case "start":
       return {
         ...db,
         state: "drawing",
         log: addLog("everyone here; game started!", db.log),
       };
+
     case "submit-drawing":
       const updatedUsersSubmitDrawing = db.users.map((user) =>
-        user.id === action.user.id ? { 
-          ...user,
-           img: action.img
-        } : user
+        user.id === action.user.id
+          ? {
+              ...user,
+              img: action.img,
+            }
+          : user
       );
-      
-      const allDrawingsSubmitted = updatedUsersSubmitDrawing.every(user => user.img);
+
+      const allDrawingsSubmitted = updatedUsersSubmitDrawing.every(
+        (user) => user.img
+      );
       return {
         ...db,
         users: updatedUsersSubmitDrawing,
-        state:  allDrawingsSubmitted ? 'voting' : 'drawing',
+        state: allDrawingsSubmitted ? "voting" : "drawing",
         log: addLog(action.user.id + " submitted a drawing!", db.log),
       };
+
     case "force-end":
       return {
         ...db,
         state: "voting",
         log: addLog("Host moves us on to voting", db.log),
       };
+
     case "submit-vote":
       const updatedUsersSubmitVote = db.users.map((user) =>
-        user.id === action.user.id ? { 
-          ...user, 
-          votedFor: action.who
-         } : user
+        user.id === action.user.id
+          ? {
+              ...user,
+              votedFor: action.who,
+            }
+          : user
       );
-      
-      const allVotesSubmitted = updatedUsersSubmitVote.every(user => user.votedFor);
+
+      const allVotesSubmitted = updatedUsersSubmitVote.every(
+        (user) => user.votedFor
+      );
       return {
         ...db,
         users: updatedUsersSubmitVote,
-        state: allVotesSubmitted ? 'viewing-results' : 'voting',
-        log: addLog(action.user.id + " submitted a drawing!", db.log),
+        state: allVotesSubmitted ? "viewing-results" : "voting",
+        log: addLog(action.user.id + " voted!", db.log),
       };
-    );
 
-    return {
-      ...db,
-      users: updatedUsersSubmitVote,
-      hasSubmitted: allSubmitted, // Update hasSubmitted based on all users
-      state: "viewing-results",
-      log: addLog("check out the results!", db.log),
-    };
+    default:
+      return db;
   }
 };
