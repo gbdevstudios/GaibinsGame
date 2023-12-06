@@ -18,7 +18,7 @@ export const Voting = ({
         🖌️ Vote on the Drawings!
       </h1>
       {gameState.users.map(user => (
-        <div key={user.id}>
+        <div key={user.id} onClick={() => handleVote(user.id)}>
           <div>{user.id}</div>
           <img src={user.img} />
         </div>

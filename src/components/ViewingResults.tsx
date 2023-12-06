@@ -1,7 +1,7 @@
 import React from "react";
 import { Action, GameDb } from "../../game/logic";
 
-export const Voting = ({
+export const ViewingResults = ({
   gameState, isHost, dispatch,
 }: {
   gameState: GameDb;
