@@ -14,10 +14,10 @@ export const Voting = ({
       <h1 className="text-2xl border-b border-yellow-400 text-center relative">
         🖌️ Vote on the Drawings!
       </h1>
-      {Object.entries(gameState.img).map(([id, obj]) => (
-        <div key={id}>
-          <div>{id}</div>
-          <img src={gameState.img} />
+      {gameState.users.map(user => (
+        <div key={user.id}>
+          <div>{user.id}</div>
+          <img src={user.img} />
         </div>
       ))}
     </div>
