@@ -1,10 +1,10 @@
 import React from "react";
-import { Action, GameState } from "../../game/logic";
+import { Action, GameDb } from "../../game/logic";
 
 export const Lobby = ({
   gameState, isHost, dispatch,
 }: {
-  gameState: GameState;
+  gameState: GameDb;
   isHost: boolean;
   dispatch: (action: Action) => void;
 }) => {

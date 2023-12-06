@@ -1,5 +1,5 @@
 // util for easy adding logs
-const addLog = (message: string, logs: GameState["log"]): GameState["log"] => {
+const addLog = (message: string, logs: GameDb["log"]): GameDb["log"] => {
   return [{ dt: new Date().getTime(), message: message }, ...logs].slice(
     0,
     MAX_LOG_SIZE
@@ -35,7 +35,7 @@ type WithUser<T> = T & { user: User };
 export type DefaultAction = { type: "UserEntered" } | { type: "UserExit" };
 
 // This interface holds all the information about your game
-export interface GameState extends BaseGameState {
+export interface GameDb extends BaseGameState {
   state: "lobby" | "instructions" | "drawing" | "voting" | "viewing-results";
   prompt: string;
   hasSubmitted:boolean;
@@ -62,7 +62,7 @@ const words = [
 
 // This is how a fresh new game starts out, it's a function so you can make it dynamic!
 // In the case of the guesser game we start out with a random target
-export const initialGame = (): GameState => ({
+export const initialGame = (): GameDb => ({
   users: [],
   hasSubmitted: false,
   state: "lobby",
@@ -81,8 +81,8 @@ type GameAction =
 
 export const gameUpdater = (
   action: ServerAction,
-  state: GameState
-): GameState => {
+  state: GameDb
+): GameDb => {
   const allSubmitted: boolean = state.users.every((user) => user.hasSubmitted);
 
   // This switch should have a case for every action type you add.
@@ -117,6 +117,8 @@ export const gameUpdater = (
       const updatedUsersSubmitDrawing = state.users.map((user) =>
         user.id === action.user.id ? { ...user, hasSubmitted: true } : user
       );
+      
+      const allSubmitted = updatedUsersSubmitDrawing.every(user => user.hasSubmitted);
 
       return {
         ...state,

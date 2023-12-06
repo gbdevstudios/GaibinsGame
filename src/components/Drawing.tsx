@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Action, GameState } from "../../game/logic";
+import { Action, GameDb } from "../../game/logic";
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 
 
@@ -10,7 +10,7 @@ export const Drawing = ({
   dispatch,
 }: {
   userId: string
-  gameState: GameState;
+  gameState: GameDb;
   dispatch: (action: Action) => void;
   isHost: boolean;
 }) => {

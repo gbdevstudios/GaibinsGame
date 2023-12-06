@@ -1,15 +1,15 @@
 import type * as Party from "partykit/server";
 
 import { gameUpdater, initialGame, Action, ServerAction } from "../game/logic";
-import { GameState } from "../game/logic";
+import { GameDb } from "../game/logic";
 
 interface ServerMessage {
-  state: GameState;
+  state: GameDb;
 }
 
 
 export default class Server implements Party.Server {
-  private gameState: GameState;
+  private gameState: GameDb;
 
   constructor(readonly party: Party.Party) {
     this.gameState = initialGame();
