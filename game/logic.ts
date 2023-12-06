@@ -119,7 +119,7 @@ export const gameUpdater = (
       );
       
       const allSubmitted = updatedUsersSubmitDrawing.every(user => user.hasSubmitted);
-
+      const nextState = allSubmitted ? 'voting' : 'drawing'
       return {
         ...db,
         users: updatedUsersSubmitDrawing,
@@ -127,6 +127,7 @@ export const gameUpdater = (
           ...db.drawings,
           [action.user.id]: { img: action.img },
         },
+        state: nextState,
         hasSubmitted: allSubmitted,
         log: addLog(action.user.id + " submitted a drawing!", db.log),
       };
