@@ -81,9 +81,9 @@ type GameAction =
 
 export const gameUpdater = (
   action: ServerAction,
-  state: GameDb
+  db: GameDb
 ): GameDb => {
-  const allSubmitted: boolean = state.users.every((user) => user.hasSubmitted);
+  const allSubmitted: boolean = db.users.every((user) => user.hasSubmitted);
 
   // This switch should have a case for every action type you add.
 
@@ -96,57 +96,57 @@ export const gameUpdater = (
   switch (action.type) {
     case "UserEntered":
       return {
-        ...state,
-        users: [...state.users, action.user],
-        log: addLog(`user ${action.user.id} joined 🎉`, state.log),
+        ...db,
+        users: [...db.users, action.user],
+        log: addLog(`user ${action.user.id} joined 🎉`, db.log),
       };
 
     case "UserExit":
       return {
-        ...state,
-        users: state.users.filter((user) => user.id !== action.user.id),
-        log: addLog(`user ${action.user.id} left 😢`, state.log),
+        ...db,
+        users: db.users.filter((user) => user.id !== action.user.id),
+        log: addLog(`user ${action.user.id} left 😢`, db.log),
       };
     case "start":
       return {
-        ...state,
+        ...db,
         state: "drawing",
-        log: addLog("everyone here; game started!", state.log),
+        log: addLog("everyone here; game started!", db.log),
       };
     case "submit-drawing":
-      const updatedUsersSubmitDrawing = state.users.map((user) =>
+      const updatedUsersSubmitDrawing = db.users.map((user) =>
         user.id === action.user.id ? { ...user, hasSubmitted: true } : user
       );
       
       const allSubmitted = updatedUsersSubmitDrawing.every(user => user.hasSubmitted);
 
       return {
-        ...state,
+        ...db,
         users: updatedUsersSubmitDrawing,
         drawings: {
-          ...state.drawings,
+          ...db.drawings,
           [action.user.id]: { img: action.img },
         },
         hasSubmitted: allSubmitted,
-        log: addLog(action.user.id + " submitted a drawing!", state.log),
+        log: addLog(action.user.id + " submitted a drawing!", db.log),
       };
     case "force-end":
       return {
-        ...state,
+        ...db,
         state: "voting",
-        log: addLog("Host moves us on to voting", state.log),
+        log: addLog("Host moves us on to voting", db.log),
       };
     case "submit-vote":
-      const updatedUsersSubmitVote = state.users.map((user) =>
+      const updatedUsersSubmitVote = db.users.map((user) =>
       user.id === action.user.id ? { ...user, hasSubmitted: true } : user
     );
 
     return {
-      ...state,
+      ...db,
       users: updatedUsersSubmitVote,
       hasSubmitted: allSubmitted, // Update hasSubmitted based on all users
       state: "viewing-results",
-      log: addLog("check out the results!", state.log),
+      log: addLog("check out the results!", db.log),
     };
   }
 };
