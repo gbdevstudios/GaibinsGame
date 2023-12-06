@@ -27,6 +27,7 @@ export interface User {
 
 // This interface holds all the information about your game
 export interface GameDb {
+  [x: string]: { [s: string]: unknown; } | ArrayLike<unknown>;
   state: "lobby" | "instructions" | "drawing" | "voting" | "viewing-results";
   users: User[];
   log: {

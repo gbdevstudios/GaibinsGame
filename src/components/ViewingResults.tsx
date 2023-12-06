@@ -8,9 +8,6 @@ export const Voting = ({
   isHost: boolean;
   dispatch: (action: Action) => void;
 }) => {
-  const handleVote = (id: string) => {
-    dispatch({ type: "submit-vote", who: id });
-  };
 
   return (
     <div>
@@ -18,7 +15,7 @@ export const Voting = ({
         🖌️ Vote on the Drawings!
       </h1>
       {Object.entries(gameState.img).map(([id, obj]) => (
-        <div key={id} onClick={() => handleVote(id)}>
+        <div key={id}>
           <div>{id}</div>
           <img src={gameState.img} />
         </div>
