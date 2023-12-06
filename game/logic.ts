@@ -23,7 +23,7 @@ export interface User {
   id: string;
   img: string | undefined;
   votedFor: string | undefined;
-  hasSubmitted: boolean; 
+  hasSubmitted: boolean;
 }
 
 // This interface holds all the information about your game
@@ -105,6 +105,7 @@ export const gameUpdater = (action: ServerAction, db: GameDb): GameDb => {
       const allDrawingsSubmitted = updatedUsersSubmitDrawing.every(
         (user) => user.img
       );
+      console.log(allDrawingsSubmitted, updatedUsersSubmitDrawing)
       return {
         ...db,
         users: updatedUsersSubmitDrawing,

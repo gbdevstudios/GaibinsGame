@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { Action, GameDb } from "../../game/logic";
+// @ts-ignore
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 
 
@@ -20,14 +21,14 @@ export const Drawing = ({
       console.error("Wait a minute. Never got the canvas reference!");
       return;
     }
-    ref.current.exportImage("png").then((img) => {
+    ref.current.exportImage("png").then((img:string) => {
       dispatch({ type: "submit-drawing", img });
     });
   };
   const handleForceEnd = () => {
     dispatch({ type: "force-end" });
   };
-  const alreadySubmitted = Boolean(gameState.drawings[userId])
+  const alreadySubmitted = gameState.users.some (x => x.id === userId && x.img)
   
   console.log('userId', userId, alreadySubmitted)
   return (
