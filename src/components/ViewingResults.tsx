@@ -2,6 +2,7 @@ import React from "react";
 import { Action, GameDb, User } from "../../game/logic";
 import { GridContainer } from "./Grid";
 import * as R from "ramda";
+import { stringToColor } from "@/utils";
 
 export const ViewingResults = ({
   gameState,
@@ -61,12 +62,30 @@ export const ResultDrawing: React.FC<GridItemProps> = ({
 
   return (
     <div style={{ width: "100%" }}>
-      <div style={{ fontWeight: "bold", fontSize: "12px" }}>{username}</div>
+      <div
+        style={{
+          fontWeight: "bold",
+          fontSize: "12px",
+          color: "white",
+          borderRadius: 6,
+          textAlign: "center",
+          backgroundColor: stringToColor(username),
+        }}
+      >
+        {username}
+      </div>
       <img src={img} alt="" style={itemStyle} />
       {votes.map((v) => (
         <div
           key={v.id}
-          style={{ padding: 8, borderRadius: 6, backgroundColor: "gray" }}
+          style={{
+            padding: 8,
+            borderRadius: 6,
+            color: "white",
+            backgroundColor: stringToColor(v.id),
+            marginTop: 6,
+            textAlign: "center",
+          }}
         >
           {v.id}
         </div>
@@ -78,10 +97,13 @@ export const ResultDrawing: React.FC<GridItemProps> = ({
             fontSize: "16px",
             padding: 8,
             borderRadius: 6,
-            backgroundColor: "green",
+            color: "black",
+            backgroundColor: "gold",
+            marginTop: 6,
+            textAlign: "center",
           }}
         >
-          winner!!😁😁😁😁
+          !WINNER!😁😁😁
         </div>
       ) : null}
     </div>
