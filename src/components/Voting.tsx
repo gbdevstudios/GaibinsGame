@@ -1,6 +1,6 @@
 import React from "react";
 import { Action, GameDb } from "../../game/logic";
-import { GridContainer, Drawing } from "./Grid";
+import { GridContainer } from "./Grid";
 
 export const Voting = ({
   gameState,
@@ -39,13 +39,13 @@ type GridItemProps = {
 
 export const VoteDrawing: React.FC<GridItemProps> = ({ img, onClick }) => {
   const itemStyle: React.CSSProperties = {
-    width: '100%',
-    objectFit: 'cover',
+    width: "100%",
+    objectFit: "cover",
   };
 
   return (
-    <div style={{width: '100%'}} onClick={onClick}>
-        <img src={img} alt="" style={itemStyle} />
+    <div style={{ width: "100%" }} onClick={onClick}>
+      <img src={img} alt="" style={itemStyle} />
     </div>
-  )
+  );
 };
