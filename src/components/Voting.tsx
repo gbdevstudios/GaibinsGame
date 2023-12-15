@@ -22,9 +22,8 @@ export const Voting = ({
       </h1>
       <GridContainer>
         {gameState.users.map((user) => (
-          <Drawing
+          <VoteDrawing
             img={user.img!}
-            username={user.id}
             key={user.id}
             onClick={() => handleVote(user.id)}
           />
@@ -32,4 +31,21 @@ export const Voting = ({
       </GridContainer>
     </div>
   );
+};
+type GridItemProps = {
+  img: string;
+  onClick: () => void;
+};
+
+export const VoteDrawing: React.FC<GridItemProps> = ({ img, onClick }) => {
+  const itemStyle: React.CSSProperties = {
+    width: '100%',
+    objectFit: 'cover',
+  };
+
+  return (
+    <div style={{width: '100%'}} onClick={onClick}>
+        <img src={img} alt="" style={itemStyle} />
+    </div>
+  )
 };
