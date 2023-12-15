@@ -14,7 +14,8 @@ export const ViewingResults = ({
 }) => {
   const drawingVotes = R.groupBy((x: User) => x.votedFor!, gameState.users);
   const maxVotes = R.reduce(
-    (acc, [id, votes]) => R.max(acc, votes!.length), 0, 
+    (acc, [id, votes]) => R.max(acc, votes!.length),
+    0,
     Object.entries(drawingVotes)
   );
   return (
@@ -23,14 +24,18 @@ export const ViewingResults = ({
         Look who won!
       </h1>
       <GridContainer>
-        {gameState.users.map((user) => (
-          <ResultDrawing
-            img={user.img!}
-            username={user.id}
-            key={user.id}
-            votes={drawingVotes[user.id] ?? []}
-          />
-        ))}
+        {gameState.users.map((user) => {
+          const votes = drawingVotes[user.id] ?? [];
+          return (
+            <ResultDrawing
+              img={user.img!}
+              username={user.id}
+              key={user.id}
+              isWinner={votes.length === maxVotes}
+              votes={votes}
+            />
+          );
+        })}
       </GridContainer>
     </div>
   );
@@ -39,6 +44,7 @@ export const ViewingResults = ({
 type GridItemProps = {
   img: string;
   votes: User[];
+  isWinner: boolean;
   username: string;
 };
 
@@ -46,6 +52,7 @@ export const ResultDrawing: React.FC<GridItemProps> = ({
   username,
   img,
   votes,
+  isWinner,
 }) => {
   const itemStyle: React.CSSProperties = {
     width: "100%",
@@ -59,11 +66,24 @@ export const ResultDrawing: React.FC<GridItemProps> = ({
       {votes.map((v) => (
         <div
           key={v.id}
-          style={{ padding: 8, borderRadius: 6, backgroundColor: "green" }}
+          style={{ padding: 8, borderRadius: 6, backgroundColor: "gray" }}
         >
           {v.id}
         </div>
       ))}
+      {isWinner ? (
+        <div
+          style={{
+            fontWeight: "bold",
+            fontSize: "16px",
+            padding: 8,
+            borderRadius: 6,
+            backgroundColor: "green",
+          }}
+        >
+          winner!!😁😁😁😁
+        </div>
+      ) : null}
     </div>
   );
 };
