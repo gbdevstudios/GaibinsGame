@@ -10,12 +10,12 @@ import styles from "./Game";
 import { Drawing } from "./Drawing";
 import { Voting } from "./Voting";
 import { Lobby } from "./Lobby";
+import { ViewingResults } from "./ViewingResults";
 
 interface GameProps {
   username: string;
   roomId: string;
 }
-
 
 const Game = ({ username, roomId }: GameProps) => {
   const { gameState, dispatch } = useGameRoom(username, roomId);
@@ -45,11 +45,24 @@ const Game = ({ username, roomId }: GameProps) => {
         );
       case "drawing":
         return (
-          <Drawing userId={username} gameState={gameState} isHost={isHost} dispatch={dispatch} />
+          <Drawing
+            userId={username}
+            gameState={gameState}
+            isHost={isHost}
+            dispatch={dispatch}
+          />
         );
       case "voting":
         return (
           <Voting gameState={gameState} isHost={isHost} dispatch={dispatch} />
+        );
+      case "viewing-results":
+        return (
+          <ViewingResults
+            gameState={gameState}
+            isHost={isHost}
+            dispatch={dispatch}
+          />
         );
     }
   })();

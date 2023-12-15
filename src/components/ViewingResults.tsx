@@ -12,7 +12,7 @@ export const ViewingResults = ({
   return (
     <div>
       <h1 className="text-2xl border-b border-yellow-400 text-center relative">
-        🖌️ Vote on the Drawings!
+        Look who won!
       </h1>
       {gameState.users.map(user => (
         <div key={user.id}>

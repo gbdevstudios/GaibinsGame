@@ -14,7 +14,7 @@ export const Lobby = ({
   return (
     <>
       <h1 className="text-8xl border-b border-yellow-400 text-center relative">
-        LOBBY!!!!!!
+        Welcome to the machine
       </h1>
       <div
         className="text-9x1 border-b flex flex-col gap-4 py-6 items-center"
