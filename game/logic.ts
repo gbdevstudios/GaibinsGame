@@ -15,12 +15,16 @@ export type ServerAction = WithUser<DefaultAction> | WithUser<GameAction>;
 // The maximum log size, change as needed
 const MAX_LOG_SIZE = 4;
 
-type WithUser<T> = T & { user: User };
+type WithUser<T> = T & { user: MiniUser };
 
 export type DefaultAction = { type: "UserEntered" } | { type: "UserExit" };
 
+export interface MiniUser {
+  id: string
+}
 export interface User {
   id: string;
+  isConnected: boolean;
   img?: string;
   votedFor?: string;
   hasSubmitted: boolean;
@@ -72,16 +76,35 @@ export const gameUpdater = (action: ServerAction, db: GameDb): GameDb => {
 
   switch (action.type) {
     case "UserEntered":
+      let newUsers: User[]
+      if (db.users.some(x => x.id === action.user.id)) {
+        // user exists so just update
+        newUsers = db.users.map(x => x.id === action.user.id ? {
+          ...x,
+          isConnected: true,
+        } : x)
+      } else {
+        // user does not exist (joining for the first time) so add to the end of the list
+        newUsers = [...db.users, {
+          ...action.user,
+          hasSubmitted: false,
+          isConnected: true,
+        }]
+      }
       return {
         ...db,
-        users: db.users.filter((user) => user.id !== action.user.id).concat([action.user]),
+        users: newUsers,
         log: addLog(`user ${action.user.id} connected 🎉`, db.log),
       };
 
     case "UserExit":
+      const newUsers2 = db.users.map(x => x.id === action.user.id ? {
+        ...x,
+        isConnected: false,
+      } : x)
       return {
         ...db,
-        users: db.users.filter((user) => user.id !== action.user.id),
+        users: newUsers2,
         log: addLog(`user ${action.user.id} disconnected 😢`, db.log),
       };
 
