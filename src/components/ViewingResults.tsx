@@ -54,7 +54,12 @@ export const ResultDrawing: React.FC<GridItemProps> = ({
       <div style={{ fontWeight: "bold", fontSize: "12px" }}>{username}</div>
       <img src={img} alt="" style={itemStyle} />
       {votes.map((v) => (
-        <div key={v.id}>{v.id}</div>
+        <div
+          key={v.id}
+          style={{ padding: 8, borderRadius: 6, backgroundColor: "green" }}
+        >
+          {v.id}
+        </div>
       ))}
     </div>
   );
