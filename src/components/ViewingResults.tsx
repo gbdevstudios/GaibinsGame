@@ -14,7 +14,7 @@ export const ViewingResults = ({
 }) => {
   const drawingVotes = R.groupBy((x: User) => x.votedFor!, gameState.users);
   const maxVotes = R.reduce(
-    (acc, [id, votes]) => R.max(acc, votes.length),
+    (acc, [id, votes]) => R.max(acc, votes!.length), 0, 
     Object.entries(drawingVotes)
   );
   return (
