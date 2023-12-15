@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@types/node": "20.5.9",
+    "@types/ramda": "^0.29.9",
     "autoprefixer": "10.4.15",
     "catenary-curve": "^1.0.1",
     "eslint": "8.48.0",
@@ -20,6 +21,7 @@
     "nextg": "^1.0.0",
     "partysocket": "0.0.17",
     "postcss": "^8.4.31",
+    "ramda": "^0.29.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-sketch-canvas": "^6.2.0",

@@ -12,7 +12,7 @@ export const ViewingResults = ({
   isHost: boolean;
   dispatch: (action: Action) => void;
 }) => {
-  const drawingVotes = R.groupBy((x: User) => x.votedFor, gameState.users);
+  const drawingVotes = R.groupBy((x: User) => x.votedFor!, gameState.users);
 
   return (
     <div>
@@ -25,7 +25,7 @@ export const ViewingResults = ({
             img={user.img!}
             username={user.id}
             key={user.id}
-            votes={drawingVotes[user.id]}
+            votes={drawingVotes[user.id] ?? []}
           />
         ))}
       </GridContainer>
@@ -53,9 +53,9 @@ export const ResultDrawing: React.FC<GridItemProps> = ({
     <div style={{ width: "100%" }}>
       <div style={{ fontWeight: "bold", fontSize: "12px" }}>{username}</div>
       <img src={img} alt="" style={itemStyle} />
-      {votes.map(v=> 
-        <div>{v.id}</div>)} 
+      {votes.map((v) => (
+        <div key={v.id}>{v.id}</div>
+      ))}
     </div>
   );
 };
-
