@@ -74,15 +74,15 @@ export const gameUpdater = (action: ServerAction, db: GameDb): GameDb => {
     case "UserEntered":
       return {
         ...db,
-        users: [...db.users, action.user],
-        log: addLog(`user ${action.user.id} joined 🎉`, db.log),
+        users: db.users.filter((user) => user.id !== action.user.id).concat([action.user]),
+        log: addLog(`user ${action.user.id} connected 🎉`, db.log),
       };
 
     case "UserExit":
       return {
         ...db,
         users: db.users.filter((user) => user.id !== action.user.id),
-        log: addLog(`user ${action.user.id} left 😢`, db.log),
+        log: addLog(`user ${action.user.id} disconnected 😢`, db.log),
       };
 
     case "start":
