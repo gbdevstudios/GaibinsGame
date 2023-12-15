@@ -1,8 +1,11 @@
 import React from "react";
 import { Action, GameDb } from "../../game/logic";
+import { GridContainer, Drawing } from "./Grid";
 
 export const Voting = ({
-  gameState, isHost, dispatch,
+  gameState,
+  isHost,
+  dispatch,
 }: {
   gameState: GameDb;
   isHost: boolean;
@@ -17,12 +20,16 @@ export const Voting = ({
       <h1 className="text-2xl border-b border-yellow-400 text-center relative">
         🖌️ Vote on the Drawings!
       </h1>
-      {gameState.users.map(user => (
-        <div key={user.id} onClick={() => handleVote(user.id)}>
-          <div>{user.id}</div>
-          <img src={user.img} />
-        </div>
-      ))}
+      <GridContainer>
+        {gameState.users.map((user) => (
+          <Drawing
+            img={user.img!}
+            username={user.id}
+            key={user.id}
+            onClick={() => handleVote(user.id)}
+          />
+        ))}
+      </GridContainer>
     </div>
   );
 };
