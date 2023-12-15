@@ -13,7 +13,10 @@ export const ViewingResults = ({
   dispatch: (action: Action) => void;
 }) => {
   const drawingVotes = R.groupBy((x: User) => x.votedFor!, gameState.users);
-
+  const maxVotes = R.reduce(
+    (acc, [id, votes]) => R.max(acc, votes.length),
+    Object.entries(drawingVotes)
+  );
   return (
     <div>
       <h1 className="text-2xl border-b border-yellow-400 text-center relative">
