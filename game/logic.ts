@@ -21,8 +21,8 @@ export type DefaultAction = { type: "UserEntered" } | { type: "UserExit" };
 
 export interface User {
   id: string;
-  img: string | undefined;
-  votedFor: string | undefined;
+  img?: string;
+  votedFor?: string;
   hasSubmitted: boolean;
 }
 
