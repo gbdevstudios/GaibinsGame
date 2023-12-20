@@ -53,6 +53,7 @@ const words = [
   "house",
   "cat",
   "dog",
+  "laptop"
 ];
 
 // This is how a fresh new game starts out, it's a function so you can make it dynamic!
