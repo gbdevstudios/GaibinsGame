@@ -45,7 +45,7 @@ export const VoteDrawing: React.FC<GridItemProps> = ({ img, onClick }) => {
 
   return (
     <div style={{ width: "100%" }} onClick={onClick}>
-      <img src={img} width="200px" height="200px" alt="" style={itemStyle} />
+      <img src={img} width="400px" height="400px" alt="" style={itemStyle} />
     </div>
   );
 };
