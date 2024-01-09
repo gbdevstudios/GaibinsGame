@@ -79,7 +79,7 @@ export const initialGame = (): GameDb => ({
   users: [],
   state: "lobby",
   log: addLog("Game Created!", []),
-  prompt: words[Math.floor(Math.random() * 9 + 1)],
+  prompt: words[Math.floor(Math.random() * 25 + 1)],
 });
 
 // Here are all the actions we can dispatch for a user
