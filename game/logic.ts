@@ -44,16 +44,33 @@ export interface GameDb {
 export let word: any;
 
 const words = [
-  "bird",
-  "lion",
-  "eagle",
-  "monkey",
-  "fish",
-  "Joe Biden",
-  "house",
-  "cat",
-  "dog",
-  "laptop"
+  "emo rock artist",
+  "jack stebbins",
+  "multiple frogs",
+  "batman",
+  "corpses in a wheelbarrow",
+  "donkey fucking a tree",
+  "69",
+  "george bush",
+  "donald trump on a golden toilet",
+  "duck peeing on a fish",
+  "ugliest person you know",
+  "donald trump joe biden sex",
+  "baby smoking a blunt",
+  "charlie riding alligator",
+  "shark wearing bikini",
+  "burger",
+  "six fingers",
+  "your least favorite person in the room being crucified",
+  "person to your left dieing",
+  "centaur but backwards",
+  "person to your right hairless and noseless",
+  "gay monkeys",
+  "how aids was made",
+  "nightmare blunt rotation",
+  "your favorite position",
+  "your least favorite etacher as a monkey",
+  "your favorite caricature"
 ];
 
 // This is how a fresh new game starts out, it's a function so you can make it dynamic!
